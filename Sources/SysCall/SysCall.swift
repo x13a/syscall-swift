@@ -90,32 +90,32 @@ public struct SysCall {
         }
         return .success(Args(path: path, args: arguments, env: env))
     }
-    
-    static func argsData(_ pid: pid_t) throws -> Data {
-        var argMax: CInt = 0
-        var size = MemoryLayout.size(ofValue: argMax)
-        let rv = sysctlbyname("kern.argmax", &argMax, &size, nil, 0)
-        guard rv == noErr else {
-            throw Error.rv(rv)
-        }
-        var buffer = Data(count: Int(argMax))
-        size = try buffer.withUnsafeMutableBytes { buf -> Int in
-            var mib = [CTL_KERN, KERN_PROCARGS2, pid]
-            var bufSize = buf.count
-            let rv = sysctl(
-                &mib,
-                u_int(mib.count),
-                buf.baseAddress!,
-                &bufSize,
-                nil,
-                0
-            )
-            guard rv == noErr else {
-                throw Error.rv(rv)
-            }
-            return bufSize
-        }
-        buffer = buffer.prefix(size)
-        return buffer
+}
+
+func argsData(_ pid: pid_t) throws -> Data {
+    var argMax: CInt = 0
+    var size = MemoryLayout.size(ofValue: argMax)
+    let rv = sysctlbyname("kern.argmax", &argMax, &size, nil, 0)
+    guard rv == noErr else {
+        throw SysCall.Error.rv(rv)
     }
+    var buffer = Data(count: Int(argMax))
+    size = try buffer.withUnsafeMutableBytes { buf -> Int in
+        var mib = [CTL_KERN, KERN_PROCARGS2, pid]
+        var bufSize = buf.count
+        let rv = sysctl(
+            &mib,
+            u_int(mib.count),
+            buf.baseAddress!,
+            &bufSize,
+            nil,
+            0
+        )
+        guard rv == noErr else {
+            throw SysCall.Error.rv(rv)
+        }
+        return bufSize
+    }
+    buffer = buffer.prefix(size)
+    return buffer
 }
