@@ -5,8 +5,8 @@ public struct SysCall {
     
     public enum Error: Swift.Error {
         case rv(Int32)
-        case error(Swift.Error)
         case args
+        case error(Swift.Error)
     }
     
     public struct Args {
