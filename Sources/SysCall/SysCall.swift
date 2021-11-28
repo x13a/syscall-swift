@@ -10,9 +10,9 @@ public struct SysCall {
     }
     
     public struct Args {
-        let path: String
-        let args: [String]
-        let env:  [String: String]
+        public let path: String
+        public let args: [String]
+        public let env:  [String: String]
     }
     
     public static func kinfo(_ pid: pid_t) -> Result<kinfo_proc, Error> {
