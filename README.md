@@ -1,6 +1,6 @@
 # syscall-swift
 
-Swift wrapper on some syscalls.
+Swift wrapper on some syscalls
 
 - KERN_PROC_PID
 - KERN_PROCARGS2
