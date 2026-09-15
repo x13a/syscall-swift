@@ -13,10 +13,10 @@ import Darwin
 import SysCall
 
 func main() throws {
-    let args = try SysCall.args(getpid()).get()
-    print(args.path)
-    print(args.args)
-    print(args.env)
+    let result = try SysCall.args2(getpid()).get()
+    print(result.decodePath())
+    print(result.decodeArgs())
+    print(result.decodeEnv())
 }
 
 main()
